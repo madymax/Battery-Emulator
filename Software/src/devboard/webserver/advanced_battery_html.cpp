@@ -35,7 +35,7 @@ std::vector<BatteryCommand> battery_commands = {
     {"resetDTC", "Erase DTC", "erase DTCs?", [](Battery* b) { return b && b->supports_reset_DTC(); },
      [](Battery* b) { b->reset_DTC(); }},
     {"readDTC", "Read DTC", nullptr, [](Battery* b) { return b && b->supports_read_DTC(); },
-     [](Battery* b) { b->read_DTC(); }},
+     [](Battery* b) { b->read_DTC(); }, 2000},
     {"resetBECM", "Restart BECM module", "restart BECM??", [](Battery* b) { return b && b->supports_reset_BECM(); },
      [](Battery* b) { b->reset_BECM(); }},
     {"contactorClose", "Close Contactors", "a contactor close request?",
@@ -93,6 +93,11 @@ String advanced_battery_processor(const String& var) {
           content += "  xhr.open('PUT', '/" + String(cmd.identifier) + "', true);";
           // Send index of the battery as PUT content
           content += "  xhr.send(batteryNum);";
+          if (cmd.reload_delay > 0) {
+            content += "  setTimeout(function() {";
+            content += "    location.reload();";
+            content += "  }, " + String(cmd.reload_delay) + ");";
+          }
           content += "}";
           content += "</script>";
         }

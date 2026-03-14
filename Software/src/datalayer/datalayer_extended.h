@@ -240,7 +240,7 @@ struct DATALAYER_INFO_CMFAEV {
   uint64_t cumulative_energy_when_charging = 0;
   uint64_t cumulative_energy_in_regen = 0;
 
-  uint32_t average_voltage_of_cells = 0;
+  uint32_t cells_voltage_sum = 0;
 
   uint16_t soc_z = 0;
   uint16_t soc_u = 0;
@@ -258,6 +258,17 @@ struct DATALAYER_INFO_CMFAEV {
 
   uint8_t highest_cell_voltage_number = 0;
   uint8_t lowest_cell_voltage_number = 0;
+
+  // DTCs
+  uint32_t dtc_codes[32];              // Array of DTC codes (3 bytes each, stored as uint32)
+  uint8_t dtc_status[32];              // Status byte for each DTC
+  unsigned long dtc_last_read_millis;  // Timestamp of last successful read
+  uint8_t dtc_count;                   // Number of DTCs present
+  bool dtc_read_in_progress;           // Flag to prevent concurrent reads
+  bool dtc_read_failed;                // Indicates last read attempt failed
+  bool UserRequestDTCreset = false;    /** User requesting DTC reset via WebUI*/
+  bool UserRequestBMSReset = false;    /** User requesting BMS reset via WebUI*/
+
 };
 
 struct DATALAYER_INFO_CMPSMART {

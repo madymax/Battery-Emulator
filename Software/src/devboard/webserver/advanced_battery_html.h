@@ -33,6 +33,8 @@ struct BatteryCommand {
 
   // Function that executes the command for the given battery.
   std::function<void(Battery*)> action;
+
+  uint16_t reload_delay = 0;
 };
 
 extern std::vector<BatteryCommand> battery_commands;
